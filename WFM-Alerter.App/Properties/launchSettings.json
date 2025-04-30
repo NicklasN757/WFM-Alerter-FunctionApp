@@ -1,0 +1,9 @@
+{
+  "profiles": {
+    "WFM_Alerter.App": {
+      "commandName": "Project",
+      "commandLineArgs": "--port 7162",
+      "launchBrowser": false
+    }
+  }
+}
