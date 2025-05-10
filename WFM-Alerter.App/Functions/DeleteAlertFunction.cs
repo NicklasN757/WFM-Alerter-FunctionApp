@@ -1,6 +1,7 @@
 ﻿using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.Functions.Worker.Http;
 using Microsoft.Extensions.Logging;
+using System.Net;
 using WFM_Alerter.Service.Interfaces;
 
 namespace WFM_Alerter.App.Functions;
@@ -14,8 +15,7 @@ internal class DeleteAlertFunction(ILoggerFactory loggerFactory, IDatabaseServic
     {
         _logger.LogInformation("DeleteAlertFunction started with alertId: {AlertId}", alertId);
         Guid alertGuid = Guid.Parse(alertId);
-        await _databaseService.RemoveAlertAsync(alertGuid);
-        HttpResponseData response = req.CreateResponse(System.Net.HttpStatusCode.OK);
-        return response;
+        HttpStatusCode statusCode = await _databaseService.RemoveAlertAsync(alertGuid);
+        return req.CreateResponse(statusCode); ;
     }
 }

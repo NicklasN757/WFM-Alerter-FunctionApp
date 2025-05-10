@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using System.Net;
 using WFM_Alerter.Service.Domain;
 using WFM_Alerter.Service.Interfaces;
 using WFM_Alerter.Service.Models;
@@ -11,16 +12,18 @@ public class DatabaseService(ILoggerFactory loggerFactory, ApplicationDbContext 
     private readonly ApplicationDbContext _dbContext = applicationDbContext;
 
     // Add an alert to the database
-    public async Task AddAlertAsync(List<Alert> alerts)
+    public async Task<HttpStatusCode> AddAlertAsync(List<Alert> alerts)
     {
         try
         {
             _dbContext.AddRange(alerts);
             await _dbContext.SaveChangesAsync();
+            return HttpStatusCode.OK;
         }
         catch (Exception ex)
         {
             _logger.LogError(ex, "Failed to add alert to the database.");
+            return HttpStatusCode.InternalServerError;
         }
         finally
         {
@@ -30,7 +33,7 @@ public class DatabaseService(ILoggerFactory loggerFactory, ApplicationDbContext 
     }
 
     // Remove an alert from the database
-    public async Task RemoveAlertAsync(Guid alertId)
+    public async Task<HttpStatusCode> RemoveAlertAsync(Guid alertId)
     {
         try
         {
@@ -39,15 +42,18 @@ public class DatabaseService(ILoggerFactory loggerFactory, ApplicationDbContext 
             {
                 _dbContext.Remove(alert);
                 await _dbContext.SaveChangesAsync();
+                return HttpStatusCode.OK;
             }
             else
             {
                 _logger.LogWarning("Alert with ID {AlertId} not found.", alertId);
+                return HttpStatusCode.NotFound;
             }
         }
         catch (Exception ex)
         {
             _logger.LogError(ex, "Failed to remove alert from the database.");
+            return HttpStatusCode.InternalServerError;
         }
         finally
         {

@@ -22,7 +22,7 @@ internal class AddAlertsFunction(ILoggerFactory loggerFactory, IDatabaseService 
         {
             return req.CreateResponse(HttpStatusCode.BadRequest);
         }
-        await _databaseService.AddAlertAsync(alerts);
-        return req.CreateResponse(HttpStatusCode.OK);
+        HttpStatusCode statusCode = await _databaseService.AddAlertAsync(alerts);
+        return req.CreateResponse(statusCode);
     }
 }
