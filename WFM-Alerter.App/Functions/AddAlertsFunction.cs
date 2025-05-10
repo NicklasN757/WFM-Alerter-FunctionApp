@@ -7,15 +7,10 @@ using WFM_Alerter.Service.Interfaces;
 using WFM_Alerter.Service.Models;
 
 namespace WFM_Alerter.App.Functions;
-internal class AddAlertsFunction
+internal class AddAlertsFunction(ILoggerFactory loggerFactory, IDatabaseService databaseService)
 {
-    private readonly ILogger _logger;
-    private readonly IDatabaseService _databaseService;
-    public AddAlertsFunction(ILoggerFactory loggerFactory, IDatabaseService databaseService)
-    {
-        _logger = loggerFactory.CreateLogger<AddAlertsFunction>();
-        _databaseService = databaseService;
-    }
+    private readonly ILogger _logger = loggerFactory.CreateLogger<AddAlertsFunction>();
+    private readonly IDatabaseService _databaseService = databaseService;
 
     [Function("AddAlerts")]
     public async Task<HttpResponseData> Run([HttpTrigger(AuthorizationLevel.Function, "post", Route = "addalerts")] HttpRequestData req, FunctionContext executionContext)

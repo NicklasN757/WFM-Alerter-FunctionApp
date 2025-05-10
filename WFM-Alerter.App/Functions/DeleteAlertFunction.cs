@@ -4,15 +4,10 @@ using Microsoft.Extensions.Logging;
 using WFM_Alerter.Service.Interfaces;
 
 namespace WFM_Alerter.App.Functions;
-internal class DeleteAlertFunction
+internal class DeleteAlertFunction(ILoggerFactory loggerFactory, IDatabaseService databaseService)
 {
-    private readonly ILogger _logger;
-    private readonly IDatabaseService _databaseService;
-    public DeleteAlertFunction(ILoggerFactory loggerFactory, IDatabaseService databaseService)
-    {
-        _logger = loggerFactory.CreateLogger<DeleteAlertFunction>();
-        _databaseService = databaseService;
-    }
+    private readonly ILogger _logger = loggerFactory.CreateLogger<DeleteAlertFunction>();
+    private readonly IDatabaseService _databaseService = databaseService;
 
     [Function("DeleteAlert")]
     public async Task<HttpResponseData> Run([HttpTrigger(AuthorizationLevel.Function, "delete", Route = "deletealert/{alertId}")] HttpRequestData req, FunctionContext executionContext, string alertId)

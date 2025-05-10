@@ -5,29 +5,10 @@ using WFM_Alerter.Service.Interfaces;
 using WFM_Alerter.Service.Models;
 
 namespace WFM_Alerter.Service.Services;
-public class DatabaseService : IDatabaseService
+public class DatabaseService(ILoggerFactory loggerFactory, ApplicationDbContext applicationDbContext) : IDatabaseService
 {
-    private readonly ILogger _logger;
-    private readonly ApplicationDbContext _dbContext;
-    public DatabaseService(ILoggerFactory loggerFactory, ApplicationDbContext applicationDbContext)
-    {
-        _logger = loggerFactory.CreateLogger<DatabaseService>();
-        _dbContext = applicationDbContext;
-    }
-
-    // Get the SQLite connection string
-    //public static string GetSQLiteConnectionString() 
-    //{
-    //    string home = Environment.GetEnvironmentVariable("HOME") ?? "";
-    //    if (!string.IsNullOrEmpty(home))
-    //    {
-    //        home = Path.Combine(home, "site", "wwwroot");
-    //    }
-    //    string databasePath = Path.Combine(home, "alerts.db");
-    //    string connStr = $"Data Source={databasePath}";
-
-    //    return connStr;
-    //}
+    private readonly ILogger _logger = loggerFactory.CreateLogger<DatabaseService>();
+    private readonly ApplicationDbContext _dbContext = applicationDbContext;
 
     // Add an alert to the database
     public async Task AddAlertAsync(List<Alert> alerts)
