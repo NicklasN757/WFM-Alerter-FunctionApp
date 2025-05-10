@@ -10,7 +10,7 @@ internal class DeleteAlertFunction
     private readonly IDatabaseService _databaseService;
     public DeleteAlertFunction(ILoggerFactory loggerFactory, IDatabaseService databaseService)
     {
-        _logger = loggerFactory.CreateLogger<AddAlertFunction>();
+        _logger = loggerFactory.CreateLogger<DeleteAlertFunction>();
         _databaseService = databaseService;
     }
 
