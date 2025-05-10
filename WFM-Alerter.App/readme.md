@@ -1,14 +1,42 @@
-# Functions summary
-Short description of the functions in this project.
+# Missing files
+This project is missing some files. The following files are missing, but are required for the project to run, these were removed from the repository for security reasons, and to avoid exposing sensitive information.
 
-## GetAlerts
-HTTP trigger to get alerts from the database. Returns a list of alerts in JSON format.
+## host.json
+Needed for Azure Functions to run. This file is used to configure the Azure Functions host. It contains settings that control the behavior of the function app, such as logging, timeouts, and other runtime settings.
 
-## DeleteAlert
-HTTP trigger to delete an alert from the database. Expects an alert ID in the request URL.
+```json
+{
+  "version": "2.0",
+  "logging": {
+    "applicationInsights": {
+      "samplingSettings": {
+        "isEnabled": true,
+        "excludedTypes": "Request"
+      },
+      "enableLiveMetricsFilters": true
+    }
+  },
+  "WfmApi": {
+    "BaseUrl": "https://api.warframe.market/v2/" // Base URL for the Warframe Market API
+  },
+  "KeyVault": {
+    "BaseUrl": "" // Key Vault URL
+  },
+  "EmailServiceConfiguration": {
+    "SenderAddress": "" // Email sender address
+  }
+}
+```
 
-## AddAlert
-HTTP trigger to add alerts to the database. Expects a JSON payload with the alert details in the request body.
+## local.settings.json
+Needed for Azure functions to run locally, and for debugging purposes. This file contains settings that are used when running the function app locally, such as application settings, and other configuration values. It is not used in production and should not be deployed to Azure.
 
-## TimedChecker
-Timed trigger that checks the database for alerts that need to be sent. If any alerts are found, compares them with the current pricing data and sends notifications if necessary. The function runs every 5 minutes. 
+```json
+{
+  "IsEncrypted": false,
+  "Values": {
+    "AzureWebJobsStorage": "UseDevelopmentStorage=true",
+    "FUNCTIONS_WORKER_RUNTIME": "dotnet-isolated"
+  }
+}
+```
