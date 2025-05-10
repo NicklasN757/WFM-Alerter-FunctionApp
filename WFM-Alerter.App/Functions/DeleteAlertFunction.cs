@@ -16,6 +16,6 @@ internal class DeleteAlertFunction(ILoggerFactory loggerFactory, IDatabaseServic
         _logger.LogInformation("DeleteAlertFunction started with alertId: {AlertId}", alertId);
         Guid alertGuid = Guid.Parse(alertId);
         HttpStatusCode statusCode = await _databaseService.RemoveAlertAsync(alertGuid);
-        return req.CreateResponse(statusCode); ;
+        return req.CreateResponse(statusCode);
     }
 }
