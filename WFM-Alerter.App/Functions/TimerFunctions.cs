@@ -5,20 +5,12 @@ using WFM_Alerter.Service.Models;
 
 namespace WFM_Alerter.App.Functions;
 
-public class TimerFunctions
+public class TimerFunctions(ILoggerFactory loggerFactory, IMailService mailService, IApiService apiService, IDatabaseService databaseService)
 {
-    private readonly ILogger _logger;
-    private readonly IMailService _emailService;
-    private readonly IApiService _apiService;
-    private readonly IDatabaseService _databaseService;
-
-    public TimerFunctions(ILoggerFactory loggerFactory, IMailService mailService, IApiService apiService, IDatabaseService databaseService)
-    {
-        _logger = loggerFactory.CreateLogger<TimerFunctions>();
-        _emailService = mailService;
-        _apiService = apiService;
-        _databaseService = databaseService;
-    }
+    private readonly ILogger _logger = loggerFactory.CreateLogger<TimerFunctions>();
+    private readonly IMailService _emailService = mailService;
+    private readonly IApiService _apiService = apiService;
+    private readonly IDatabaseService _databaseService = databaseService;
 
     [Function("TimedChecker")]
     public async Task Run([TimerTrigger("0 */5 * * * *")] TimerInfo myTimer)
@@ -29,7 +21,7 @@ public class TimerFunctions
         {
             _logger.LogInformation("Checking for item: {ItemName} at price: {Price}.", alertItem.ItemName, alertItem.Price);
 
-            ApiResponse response = await _apiService.GetApiResponseAsync(alertItem);
+            ApiResponse? response = await _apiService.GetApiResponseAsync(alertItem);
             if (response == null || response.Data.SellOrders.Count == 0)
             {
                 _logger.LogWarning("No data found for item: {ItemName}.", alertItem.ItemName);

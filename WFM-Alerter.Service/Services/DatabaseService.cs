@@ -1,45 +1,29 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using System.Net;
 using WFM_Alerter.Service.Domain;
 using WFM_Alerter.Service.Interfaces;
 using WFM_Alerter.Service.Models;
 
 namespace WFM_Alerter.Service.Services;
-public class DatabaseService : IDatabaseService
+public class DatabaseService(ILoggerFactory loggerFactory, ApplicationDbContext applicationDbContext) : IDatabaseService
 {
-    private readonly ILogger _logger;
-    private readonly ApplicationDbContext _dbContext;
-    public DatabaseService(ILoggerFactory loggerFactory, ApplicationDbContext applicationDbContext)
-    {
-        _logger = loggerFactory.CreateLogger<DatabaseService>();
-        _dbContext = applicationDbContext;
-    }
-
-    // Get the SQLite connection string
-    //public static string GetSQLiteConnectionString() 
-    //{
-    //    string home = Environment.GetEnvironmentVariable("HOME") ?? "";
-    //    if (!string.IsNullOrEmpty(home))
-    //    {
-    //        home = Path.Combine(home, "site", "wwwroot");
-    //    }
-    //    string databasePath = Path.Combine(home, "alerts.db");
-    //    string connStr = $"Data Source={databasePath}";
-
-    //    return connStr;
-    //}
+    private readonly ILogger _logger = loggerFactory.CreateLogger<DatabaseService>();
+    private readonly ApplicationDbContext _dbContext = applicationDbContext;
 
     // Add an alert to the database
-    public async Task AddAlertAsync(List<Alert> alerts)
+    public async Task<HttpStatusCode> AddAlertAsync(List<Alert> alerts)
     {
         try
         {
             _dbContext.AddRange(alerts);
             await _dbContext.SaveChangesAsync();
+            return HttpStatusCode.OK;
         }
         catch (Exception ex)
         {
             _logger.LogError(ex, "Failed to add alert to the database.");
+            return HttpStatusCode.InternalServerError;
         }
         finally
         {
@@ -49,7 +33,7 @@ public class DatabaseService : IDatabaseService
     }
 
     // Remove an alert from the database
-    public async Task RemoveAlertAsync(Guid alertId)
+    public async Task<HttpStatusCode> RemoveAlertAsync(Guid alertId)
     {
         try
         {
@@ -58,15 +42,18 @@ public class DatabaseService : IDatabaseService
             {
                 _dbContext.Remove(alert);
                 await _dbContext.SaveChangesAsync();
+                return HttpStatusCode.OK;
             }
             else
             {
                 _logger.LogWarning("Alert with ID {AlertId} not found.", alertId);
+                return HttpStatusCode.NotFound;
             }
         }
         catch (Exception ex)
         {
             _logger.LogError(ex, "Failed to remove alert from the database.");
+            return HttpStatusCode.InternalServerError;
         }
         finally
         {

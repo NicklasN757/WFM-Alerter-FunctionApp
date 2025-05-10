@@ -5,15 +5,10 @@ using WFM_Alerter.Service.Interfaces;
 using WFM_Alerter.Service.Models;
 
 namespace WFM_Alerter.Service.Services;
-public class ApiService : IApiService
+public class ApiService(ILoggerFactory loggerFactory, IHttpClientFactory httpClientFactory) : IApiService
 {
-    private readonly ILogger _logger;
-    private readonly HttpClient _httpClient;
-    public ApiService(ILoggerFactory loggerFactory, IHttpClientFactory httpClientFactory)
-    {
-        _logger = loggerFactory.CreateLogger<ApiService>();
-        _httpClient = httpClientFactory.CreateClient("WFMApiClient");
-    }
+    private readonly ILogger _logger = loggerFactory.CreateLogger<ApiService>();
+    private readonly HttpClient _httpClient = httpClientFactory.CreateClient("WFMApiClient");
 
     public async Task<ApiResponse> GetApiResponseAsync(Alert alertItem) 
     {
