@@ -16,25 +16,25 @@ public class DatabaseService : IDatabaseService
     }
 
     // Get the SQLite connection string
-    public static string GetSQLiteConnectionString() 
-    {
-        string home = Environment.GetEnvironmentVariable("HOME") ?? "";
-        if (!string.IsNullOrEmpty(home))
-        {
-            home = Path.Combine(home, "site", "wwwroot");
-        }
-        string databasePath = Path.Combine(home, "alerts.db");
-        string connStr = $"Data Source={databasePath}";
+    //public static string GetSQLiteConnectionString() 
+    //{
+    //    string home = Environment.GetEnvironmentVariable("HOME") ?? "";
+    //    if (!string.IsNullOrEmpty(home))
+    //    {
+    //        home = Path.Combine(home, "site", "wwwroot");
+    //    }
+    //    string databasePath = Path.Combine(home, "alerts.db");
+    //    string connStr = $"Data Source={databasePath}";
 
-        return connStr;
-    }
+    //    return connStr;
+    //}
 
     // Add an alert to the database
-    public async Task AddAlertAsync(Alert alert)
+    public async Task AddAlertAsync(List<Alert> alerts)
     {
         try
         {
-            await _dbContext.AddAsync(alert);
+            _dbContext.AddRange(alerts);
             await _dbContext.SaveChangesAsync();
         }
         catch (Exception ex)

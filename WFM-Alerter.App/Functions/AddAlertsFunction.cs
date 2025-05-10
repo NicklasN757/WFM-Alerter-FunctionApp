@@ -7,27 +7,27 @@ using WFM_Alerter.Service.Interfaces;
 using WFM_Alerter.Service.Models;
 
 namespace WFM_Alerter.App.Functions;
-internal class AddAlertFunction
+internal class AddAlertsFunction
 {
     private readonly ILogger _logger;
     private readonly IDatabaseService _databaseService;
-    public AddAlertFunction(ILoggerFactory loggerFactory, IDatabaseService databaseService)
+    public AddAlertsFunction(ILoggerFactory loggerFactory, IDatabaseService databaseService)
     {
-        _logger = loggerFactory.CreateLogger<AddAlertFunction>();
+        _logger = loggerFactory.CreateLogger<AddAlertsFunction>();
         _databaseService = databaseService;
     }
 
-    [Function("AddAlert")]
-    public async Task<HttpResponseData> Run([HttpTrigger(AuthorizationLevel.Function, "post", Route = "addalert")] HttpRequestData req, FunctionContext executionContext)
+    [Function("AddAlerts")]
+    public async Task<HttpResponseData> Run([HttpTrigger(AuthorizationLevel.Function, "post", Route = "addalerts")] HttpRequestData req, FunctionContext executionContext)
     {
-        _logger.LogInformation("AddAlertFunction started.");
+        _logger.LogInformation("AddAlertsFunction started.");
         string requestBody = await new StreamReader(req.Body).ReadToEndAsync();
-        Alert alert = JsonSerializer.Deserialize<Alert>(requestBody);
-        if (alert == null)
+        List<Alert>? alerts = JsonSerializer.Deserialize<List<Alert>>(requestBody);
+        if (alerts == null)
         {
             return req.CreateResponse(HttpStatusCode.BadRequest);
         }
-        await _databaseService.AddAlertAsync(alert);
+        await _databaseService.AddAlertAsync(alerts);
         return req.CreateResponse(HttpStatusCode.OK);
     }
 }

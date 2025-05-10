@@ -6,9 +6,9 @@ public interface IDatabaseService
     /// <summary>
     /// Adds an alert to the database.
     /// </summary>
-    /// <param name="alert"></param>
+    /// <param name="alerts"></param>
     /// <returns>Nothing</returns>
-    Task AddAlertAsync(Alert alert);
+    Task AddAlertAsync(List<Alert> alerts);
 
     /// <summary>
     /// Removes an alert from the database.
