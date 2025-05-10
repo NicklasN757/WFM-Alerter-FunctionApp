@@ -1,0 +1,131 @@
+{
+	"info": {
+		"_postman_id": "3c081515-c225-4cbc-bb1c-3695c96994b8",
+		"name": "WFM-Alerter-API",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "28955678"
+	},
+	"item": [
+		{
+			"name": "Get-Alerts",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/GetAlerts?code={{function_key}}",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"GetAlerts"
+					],
+					"query": [
+						{
+							"key": "code",
+							"value": "{{function_key}}"
+						}
+					]
+				},
+				"description": "This is a GET request and it is used to \"get\" data from an endpoint. There is no request body for a GET request, but you can use query parameters to help specify the resource you want data on (e.g., in this request, we have `id=1`).\n\nA successful GET response will have a `200 OK` status, and should include some kind of response body - for example, HTML web content or JSON data."
+			},
+			"response": []
+		},
+		{
+			"name": "Add-Alert",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "[\r\n    {\r\n        \"Email\": \"coolmail@mail.com\",\r\n        \"ItemName\": \"wukong_prime_blueprint\",\r\n        \"ItemRank\": 0,\r\n        \"Price\": 30\r\n    },\r\n    {\r\n        \"Email\": \"coolmail@mail.com\",\r\n        \"ItemName\": \"titania_prime_chassis_blueprint\",\r\n        \"ItemRank\": 0,\r\n        \"Price\": 35\r\n    }\r\n]",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}/AddAlerts?code={{function_key}}",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"AddAlerts"
+					],
+					"query": [
+						{
+							"key": "code",
+							"value": "{{function_key}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete-Alert",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/deletealert/{{AlertGuid}}?code={{function_key}}",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"deletealert",
+						"{{AlertGuid}}"
+					],
+					"query": [
+						{
+							"key": "code",
+							"value": "{{function_key}}"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "AlertGuid",
+			"value": "00000000-0000-0000-0000-000000000000",
+			"type": "string"
+		}
+	]
+}
