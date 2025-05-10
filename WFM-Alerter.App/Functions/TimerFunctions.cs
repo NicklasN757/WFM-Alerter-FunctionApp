@@ -21,7 +21,7 @@ public class TimerFunctions(ILoggerFactory loggerFactory, IMailService mailServi
         {
             _logger.LogInformation("Checking for item: {ItemName} at price: {Price}.", alertItem.ItemName, alertItem.Price);
 
-            ApiResponse response = await _apiService.GetApiResponseAsync(alertItem);
+            ApiResponse? response = await _apiService.GetApiResponseAsync(alertItem);
             if (response == null || response.Data.SellOrders.Count == 0)
             {
                 _logger.LogWarning("No data found for item: {ItemName}.", alertItem.ItemName);
